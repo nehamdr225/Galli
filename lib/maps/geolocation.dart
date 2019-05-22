@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import './error.dart';
+import 'dart:async';
 import './map.dart';
 
 class CurrentLocationWidget extends StatefulWidget {
@@ -50,6 +52,10 @@ class _LocationState extends State<CurrentLocationWidget> {
             (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data == GeolocationStatus.denied) {
+            return PlaceholderWidget('Access to location denied.',
+            'Allow access to the location services for this App using the device settings.');
           }
 
           return MapWidget('Current location:', _position.latitude.toDouble(),_position.longitude.toDouble());

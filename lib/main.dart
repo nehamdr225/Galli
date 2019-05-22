@@ -4,13 +4,23 @@ import './maps/geolocation.dart';
 
 void main() => runApp(MyApp());
 
-
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyApps(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+
+class MyApps extends StatefulWidget {
+  @override
+  _MyAppsState createState() => _MyAppsState();
+}
+
+class _MyAppsState extends State<MyApps> {
 
   // int _selectedPage=0;
   // final _pageOption= [LocationPage()];
@@ -19,8 +29,39 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: null, //showMenu({ BuildContext context,  }),
-        //body: _pageOption[_selectedPage],
+        
+        appBar: null, 
+  //       AppBar(
+  //  // backgroundColor: Color(fillColor: MaterialType.transparency),
+  //         leading: IconButton(
+  //           icon: Icon(
+  //             Icons.menu, semanticLabel: 'menu',
+  //           ),
+  //           onPressed: (){
+  //             print('menu button');
+  //           },
+  //         ),
+  //         actions: <Widget>[
+  //           // TextField(
+  //           //   decoration: InputDecoration(
+  //           //     filled: true,
+  //           //     labelText: 'Search'
+  //           //   ),
+              
+  //           // ),
+  //           IconButton(
+  //             icon: Icon(Icons.search,
+  //             semanticLabel: 'search'),
+  //             onPressed: (){
+
+  //               print('Search button');
+  //             },
+              
+  //           ),
+  //         ],
+          
+  //       ), //showMenu({ BuildContext context,  }),
+  //       //body: _pageOption[_selectedPage],
         body: CurrentLocationWidget(),
       ),
     );

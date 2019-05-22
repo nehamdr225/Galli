@@ -12,8 +12,8 @@ class MapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Maps(lat, long),
-      
+      debugShowCheckedModeBanner: false,
+      home: Maps(lat, long),     
     );
   }
 }
@@ -56,37 +56,35 @@ class _MapsState extends State<Maps> {
     Widget build(BuildContext context) {
       return Scaffold(
         body: Stack(
-          children: [Container(child:GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  
-                  target: LatLng(lat, long),
-                  //target: LatLng(lati, lang),
+          children: <Widget>[Container(child:GoogleMap(
+                initialCameraPosition: CameraPosition(                  
+                  target: LatLng(lat, long),        
                   zoom: 20,
                 ),
                 markers: Set.from(allMarkers),     
                 mapType: MapType.normal,
-                  // onMapCreated: (GoogleMapController controller){
-                  //   _controller.complete(controller);
-                  // },
-                  onMapCreated: mapCreated,
+                onMapCreated: mapCreated,
                 ),   
-              ),    
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: InkWell(
-                  onTap: movetoLocation,
-                  child: Container(
-                    height: 40.0,
-                    width: 40.0,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.teal
-                    ),
-                    child: Icon(Icons.forward, color:Colors.white),
-                  ),
-                ),)
-          ]),
-          );    
-    }
+              ), 
+
+              Container(
+                height: 100,
+                width: 400,
+                color: Color.fromRGBO(255, 255, 255, 0.8),
+                alignment: Alignment(-0.0, 0.9),
+                child: TextField(         
+                        decoration: InputDecoration(
+                          labelText: 'Search',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          )
+                        ),                   
+                      ),
+              ),   
+          ],
+      ),
+    );    
+  }
     
 
   void mapCreated(controller){
@@ -101,3 +99,30 @@ class _MapsState extends State<Maps> {
     ));
   }
 }
+
+
+// Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: <Widget>[
+//           Text(title, style: TextStyle(color: Colors.black, fontSize: 32.0) ),
+//           Text(message, style: TextStyle(color: Colors.black, fontSize: 32.0) ),
+//         ],
+//       ),
+      
+//     )
+
+// Align(
+//                 alignment: Alignment.bottomCenter,
+//                 child: InkWell(
+//                   onTap: movetoLocation,
+//                   child: Container(
+//                     height: 40.0,
+//                     width: 40.0,
+//                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),
+//                     color: Colors.teal
+//                     ),
+//                     child: Icon(Icons.forward, color:Colors.white),
+//                   ),
+//                 ),)
