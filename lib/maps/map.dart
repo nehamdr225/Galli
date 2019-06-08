@@ -1,35 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../backend/RESTapi.dart';
 
 
 class MapWidget extends StatelessWidget {
-  const MapWidget(this.title, this.lat, this.long);
+  const MapWidget(this.title, this.lat, this.long, );//this.count, this.density);
   final String title;
   final double lat;
   final double long;
+  
+  // final double count;
+  // final double density;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: true,
       home: Maps(lat, long),     
     );
   }
 }
 
 class Maps extends StatefulWidget {
-  const Maps(this.lat, this.long);
+  const Maps(this.lat, this.long);//this.count, this.density);
   final double lat;
   final double long;  
+  // final double count;
+  // final double density;
   @override
   _MapsState createState() => _MapsState(lat, long);
 }
 
 class _MapsState extends State<Maps> {  
-  _MapsState(this.lat, this.long);
+  _MapsState(this.lat, this.long);// this.count, this.density);
   final double lat;
   final double long;
+  // final double place;
+  // final double count;
+  // final double density;
 
   List<Marker> allMarkers =[];
   
@@ -42,51 +52,52 @@ class _MapsState extends State<Maps> {
       Marker(
         markerId:MarkerId('myMarker'),
         draggable: true,
+        infoWindow: InfoWindow(title: 'Status'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
         onTap: (){
-          print('marker tapped');
+          //_dialogcall(context);
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => StatusAlert()),//place, count, density)),
+          );
+          //createAlertDialog(context);//, place, count, density);  
         },
         position: LatLng(lat, long),
+        //position: LatLng(27.6915,85.342),//lat, long),
       )
     );
   }
-  //Completer<GoogleMapController> _controller = Completer();
-
+  createAlertDialog(BuildContext context){//, place, density, count){
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(  
+        title: Text('Alert Dialog'),
+        // title: Text('Place: $place'),
+        // content: Text('Traffic Count: $count, Traffic Density: $density'),
+        backgroundColor: Colors.grey ,
+        //child: Text("Count : $context"),        
+     );
+    });
+  }
   
   @override
     Widget build(BuildContext context) {
       return Scaffold(
         body: Stack(
-          children: <Widget>[Container(child:GoogleMap(
-                initialCameraPosition: CameraPosition(                  
-                  target: LatLng(lat, long),        
-                  zoom: 20,
+            children: <Widget>[//Container(
+            GoogleMap(
+                initialCameraPosition: CameraPosition( 
+                  target: LatLng(lat, long),                         
+                  //target: LatLng(27.6915,85.342),//lat, long),        
+                  zoom: 30,
                 ),
                 markers: Set.from(allMarkers),     
                 mapType: MapType.normal,
                 onMapCreated: mapCreated,
-                ),   
-              ), 
-
-              Container(
-                height: 100,
-                width: 400,
-                color: Color.fromRGBO(255, 255, 255, 0.8),
-                alignment: Alignment(-0.0, 0.9),
-                child: TextField(         
-                        decoration: InputDecoration(
-                          labelText: 'Search',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          )
-                        ),                   
-                      ),
-              ),   
+                ),
           ],
       ),
+      
     );    
   }
-    
-
   void mapCreated(controller){
     setState(() {
       _controller = controller;
@@ -100,29 +111,3 @@ class _MapsState extends State<Maps> {
   }
 }
 
-
-// Center(
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: <Widget>[
-//           Text(title, style: TextStyle(color: Colors.black, fontSize: 32.0) ),
-//           Text(message, style: TextStyle(color: Colors.black, fontSize: 32.0) ),
-//         ],
-//       ),
-      
-//     )
-
-// Align(
-//                 alignment: Alignment.bottomCenter,
-//                 child: InkWell(
-//                   onTap: movetoLocation,
-//                   child: Container(
-//                     height: 40.0,
-//                     width: 40.0,
-//                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0),
-//                     color: Colors.teal
-//                     ),
-//                     child: Icon(Icons.forward, color:Colors.white),
-//                   ),
-//                 ),)

@@ -30,8 +30,8 @@ dev_dependencies:
   google_maps_flutter: ^0.5.13
   geolocator: ^4.0.3
   flutter_google_places: ^0.2.2
-  
-
+  path_provider: ^1.1.0
+  http: ^0.12.0
   geocoder: ^0.1.2
 
 

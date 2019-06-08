@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import './error.dart';
 import 'dart:async';
 import './map.dart';
+import './error.dart';
+
 
 class CurrentLocationWidget extends StatefulWidget {
   @override
@@ -49,16 +50,21 @@ class _LocationState extends State<CurrentLocationWidget> {
     return FutureBuilder<GeolocationStatus>(
         future: Geolocator().checkGeolocationPermissionStatus(),
         builder:
-            (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
+        (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.data == GeolocationStatus.denied) {
-            return PlaceholderWidget('Access to location denied.',
-            'Allow access to the location services for this App using the device settings.');
-          }
-
-          return MapWidget('Current location:', _position.latitude.toDouble(),_position.longitude.toDouble());
-        });
+          } else if (snapshot.data == GeolocationStatus.denied) {
+              return ErrorDialogWidget('Location Access Denied.',
+                'Allow access to the location services for this App using the device settings.');
+          } else if(snapshot.hasError){
+              return TurnOnLocation('Turn on Location', 'Your location is not turned on. Please turn it on.');
+            }
+          
+        return MapWidget('Current location:', _position.latitude.toDouble(),_position.longitude.toDouble());
+        },
+        
+        );
   }
 }
+
+

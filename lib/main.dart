@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-//import './maps/map.dart';
 import './maps/geolocation.dart';
+import './UI/drawer.dart';
+import 'package:galli/UI/search.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,8 +9,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       home: MyApps(),
+      
     );
   }
 }
@@ -21,49 +23,37 @@ class MyApps extends StatefulWidget {
 }
 
 class _MyAppsState extends State<MyApps> {
-
-  // int _selectedPage=0;
-  // final _pageOption= [LocationPage()];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        
-        appBar: null, 
-  //       AppBar(
-  //  // backgroundColor: Color(fillColor: MaterialType.transparency),
-  //         leading: IconButton(
-  //           icon: Icon(
-  //             Icons.menu, semanticLabel: 'menu',
-  //           ),
-  //           onPressed: (){
-  //             print('menu button');
-  //           },
-  //         ),
-  //         actions: <Widget>[
-  //           // TextField(
-  //           //   decoration: InputDecoration(
-  //           //     filled: true,
-  //           //     labelText: 'Search'
-  //           //   ),
-              
-  //           // ),
-  //           IconButton(
-  //             icon: Icon(Icons.search,
-  //             semanticLabel: 'search'),
-  //             onPressed: (){
-
-  //               print('Search button');
-  //             },
-              
-  //           ),
-  //         ],
-          
-  //       ), //showMenu({ BuildContext context,  }),
-  //       //body: _pageOption[_selectedPage],
+      home: Scaffold(  
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(
+            actions: <Widget>[
+              //SearchWidget(),
+              IconButton( 
+                icon: Icon(Icons.search) ,
+                onPressed: (){
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder:(context) => SearchWidget()),
+                  );
+                 
+                },
+              )
+            ],
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black)
+            
+          ),
+        ),      
         body: CurrentLocationWidget(),
-      ),
-    );
+        drawer: DrawerApp(),        //child: new Center(child: const Text('Drawer'),),
+        //),        
+      )
+    );  
+      
   }
 }
+  

@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 
-class PlaceholderWidget extends StatelessWidget {
-  const PlaceholderWidget(this.title, this.message);
-
+class ErrorDialogWidget extends StatelessWidget {
+  ErrorDialogWidget(this.title, this.m1);
   final String title;
-  final String message;
-
+  final String m1;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(title,
-              style: const TextStyle(fontSize: 32.0, color: Colors.black54),
-              textAlign: TextAlign.center),
-          Text(message,
-              style: const TextStyle(fontSize: 16.0, color: Colors.black54),
-              textAlign: TextAlign.center),
-        ],
-      ),
+    return AlertDialog(
+      title: Text(title),
+      content: Text(m1),
+    );
+  }
+}
+
+class TurnOnLocation extends StatelessWidget {
+  TurnOnLocation(this.title, this.m1);
+  final String title;
+  final String m1;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(m1),
     );
   }
 }
