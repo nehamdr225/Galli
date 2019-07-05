@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import './signin.dart';
 
 class DrawerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      
               child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               child: Text('Drawer Header'),
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Color(0xff5938),
               ),
             ),
             ListTile(
@@ -20,12 +22,12 @@ class DrawerApp extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
+              title: Text('Account'),
+              onTap: () {                
+                Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder:(context) => MyApp()),
+                  );
               },
             ),
           ],

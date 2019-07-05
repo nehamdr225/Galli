@@ -1,45 +1,38 @@
 import 'package:flutter/material.dart';
-//import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../backend/RESTapi.dart';
+import '../UI/drawer.dart';
+import '../UI/search.dart';
+import '../UI/colors.dart';
 
-
+//import 'assets';
 class MapWidget extends StatelessWidget {
-  const MapWidget(this.title, this.lat, this.long, );//this.count, this.density);
+  const MapWidget(this.title, this.lat, this.long, );
   final String title;
   final double lat;
   final double long;
-  
-  // final double count;
-  // final double density;
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //debugShowCheckedModeBanner: true,
       home: Maps(lat, long),     
     );
   }
 }
 
 class Maps extends StatefulWidget {
-  const Maps(this.lat, this.long);//this.count, this.density);
+  const Maps(this.lat, this.long);
   final double lat;
   final double long;  
-  // final double count;
-  // final double density;
   @override
   _MapsState createState() => _MapsState(lat, long);
 }
 
 class _MapsState extends State<Maps> {  
-  _MapsState(this.lat, this.long);// this.count, this.density);
+  _MapsState(this.lat, this.long);
   final double lat;
   final double long;
-  // final double place;
-  // final double count;
-  // final double density;
 
   List<Marker> allMarkers =[];
   
@@ -52,37 +45,27 @@ class _MapsState extends State<Maps> {
       Marker(
         markerId:MarkerId('myMarker'),
         draggable: true,
-        infoWindow: InfoWindow(title: 'Status'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-        onTap: (){
-          //_dialogcall(context);
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => StatusAlert()),//place, count, density)),
-          );
-          //createAlertDialog(context);//, place, count, density);  
-        },
-        position: LatLng(lat, long),
+        infoWindow: InfoWindow(title: 'Your current location'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+         position: LatLng(lat, long),
+        
+        // onTap: (){
+        //   Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => StatusAlert()),//place, count, density)),
+        //   );
+        //}, 
         //position: LatLng(27.6915,85.342),//lat, long),
       )
     );
   }
-  createAlertDialog(BuildContext context){//, place, density, count){
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(  
-        title: Text('Alert Dialog'),
-        // title: Text('Place: $place'),
-        // content: Text('Traffic Count: $count, Traffic Density: $density'),
-        backgroundColor: Colors.grey ,
-        //child: Text("Count : $context"),        
-     );
-    });
-  }
   
   @override
     Widget build(BuildContext context) {
-      return Scaffold(
-        body: Stack(
-            children: <Widget>[//Container(
+      return MaterialApp(
+        home: Scaffold(   
+          appBar: GradientAppBar(),
+          body: Stack(
+            children: <Widget>[//Container(            
             GoogleMap(
                 initialCameraPosition: CameraPosition( 
                   target: LatLng(lat, long),                         
@@ -90,14 +73,33 @@ class _MapsState extends State<Maps> {
                   zoom: 30,
                 ),
                 markers: Set.from(allMarkers),     
-                mapType: MapType.normal,
+                mapType: MapType.terrain,
                 onMapCreated: mapCreated,
                 ),
+                _buildContainer(),
           ],
       ),
-      
-    );    
+      drawer: DrawerApp(),
+     )  
+    );   
   }
+  Widget _buildContainer(){
+    return SafeArea(
+      child: Align(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton(
+        child: Icon(Icons.my_location),
+        backgroundColor: Colors.green,
+        onPressed: (){
+           Navigator.push(
+            context, MaterialPageRoute(builder: (context) => StatusAlert()),//place, count, density)),
+          );
+        },
+      ),
+    )
+    );
+  }
+
   void mapCreated(controller){
     setState(() {
       _controller = controller;
@@ -111,3 +113,41 @@ class _MapsState extends State<Maps> {
   }
 }
 
+class GradientAppBar extends StatelessWidget implements PreferredSize{
+  build(BuildContext context)=> Stack(
+    children: <Widget> [
+      Positioned(
+        child:  DecoratedBox(
+          child: Container(width: 400.0, height: 100.0,),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.green,
+              Colors.red[800],
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.topRight)
+          ),
+        )
+      ),
+      AppBar(
+      backgroundColor: appBarcolor,
+      iconTheme: IconThemeData(color: iconcolor),
+      actions: <Widget>[
+        //SearchWidget(),
+        IconButton( 
+          icon: Icon(Icons.search, color: Colors.white,) ,
+          onPressed: (){
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder:(context) => SearchWidget()),
+            );
+          },
+        )
+      ])
+    ]); 
+    
+  Widget get child => null;
+
+    final preferredSize = const Size.fromHeight(40.0);
+  
+}
