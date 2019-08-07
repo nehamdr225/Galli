@@ -1,90 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:geolocator/geolocator.dart';
+//import './geolocation.dart';
 import '../backend/RESTapi.dart';
 import '../UI/drawer.dart';
 import '../UI/search.dart';
 import '../UI/colors.dart';
 
+//import 'assets';
+class MapWidget extends StatelessWidget {
+  const MapWidget(this.title, this.lat, this.long, );
+  final String title;
+  final double lat;
+  final double long;
 
 
-class CurrentLocationWidget extends StatefulWidget {
   @override
-  _LocationState createState() => _LocationState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Maps(lat, long),     
+    );
+  }
 }
 
-class _LocationState extends State<CurrentLocationWidget> {
-   Geolocator geolocator = Geolocator();
+class Maps extends StatefulWidget {
+  const Maps(this.lat, this.long);
+  final double lat;
+  final double long;  
+  @override
+  _MapsState createState() => _MapsState(lat, long);
+}
 
-  Position userLocation;
-    List<Marker> allMarkers =[];      
+class _MapsState extends State<Maps> {  
+  _MapsState(this.lat, this.long);
+  final double lat;
+  final double long;
+
+  List<Marker> allMarkers =[];
+  
   GoogleMapController _controller;
 
-
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _getLocation().then((position) {
-      userLocation = position;
-      allMarkers.add(
+    allMarkers.add(
       Marker(
         markerId:MarkerId('myMarker'),
         draggable: true,
         infoWindow: InfoWindow(title: 'Your current location'),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-        position: LatLng(userLocation.latitude.toDouble(), userLocation.longitude.toDouble()),
+        position: LatLng(lat, long),
       )
     );
-    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: GradientAppBar(),
-      drawer: DrawerApp(),
-      body: Center(
-        child: 
-          userLocation == null
-            ? CircularProgressIndicator(
-                backgroundColor: Colors.grey[400],
-              )
-            : Stack(
-              children: <Widget> [
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(userLocation.latitude.toDouble(), userLocation.longitude.toDouble()),
-                    zoom: 30
-                  ),
-                  markers: Set.from(allMarkers),     
-                  mapType: MapType.normal,
-                  onMapCreated: mapCreated,
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        home: Scaffold(   
+          appBar: GradientAppBar(),
+          body: Stack(
+            children: <Widget>[//Container(            
+            GoogleMap(
+                initialCameraPosition: CameraPosition( 
+                  target: LatLng(lat, long),        
+                  zoom: 30,
                 ),
-                _buildContainer(),  
-                IconButton(
-                  icon: Icon(Icons.add_location),
-                  onPressed: (){
-                    movetoLocation();
-                  },
-                )          
-
-              ]),
-            ),
-          );
+                markers: Set.from(allMarkers),     
+                mapType: MapType.terrain,
+                onMapCreated: mapCreated,
+                ),
+                _buildContainer(),
+          ],
+      ),
+      drawer: DrawerApp(),
+     )  
+    );   
   }
-
-  Future<Position> _getLocation() async {
-    var currentLocation;
-    try {
-      currentLocation = await geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } catch (e) {
-      currentLocation = null;
-    }
-    return currentLocation;
-  }
-
   Widget _buildContainer(){
     return SafeArea(
       child: Align(
@@ -101,19 +93,20 @@ class _LocationState extends State<CurrentLocationWidget> {
     )
     );
   }
+  
+
   void mapCreated(controller){
     setState(() {
       _controller = controller;
     });
   }
-    movetoLocation(){
+  movetoLocation(){
     _controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: LatLng(userLocation.latitude.toDouble(), userLocation.longitude.toDouble()),
-                      zoom: 30.0, bearing: 45.0,tilt:45.0),
+      CameraPosition(target: LatLng(28.2333333, 83.9833333),
+                      zoom: 12.0, bearing: 45.0,tilt:45.0),
     ));
   }
 }
-
 
 class GradientAppBar extends StatelessWidget implements PreferredSize{
 
@@ -154,3 +147,4 @@ class GradientAppBar extends StatelessWidget implements PreferredSize{
     final preferredSize = const Size.fromHeight(40.0);
   
 }
+

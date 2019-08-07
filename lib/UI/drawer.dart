@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './signin.dart';
-
+import './messageView.dart';
 class DrawerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,12 @@ class DrawerApp extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Item 1'),
+              title: Text('Messages'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder:(context) => MessageApp()),
+                  );
               },
             ),
             ListTile(
